@@ -1,0 +1,63 @@
+GITHUB_ACCESS_TOKEN:
+
+keywords:
+  graph:
+    - invertexrange
+  arrayheap:
+    - arrayheap
+    - changeitematkey
+    - datatoheap
+    - heapandfreestack
+    - isonheap
+    - removeminitem
+  process:
+    - currentsystemtime
+    - getsubmissiontime
+    - removeminitem
+    - requiredtime
+    - submissiontime
+  avltree:
+    - avlnode
+    - avltree
+    - encryptiontree
+    - printpreorder
+    - rebalancepathtoroot
+    - singlerotateleft
+    - singlerotateright
+    - verifybalance
+    - verifysearchorder
+  bst:
+    - bstnode
+    - encryptiontree
+    - printpreorder
+  wordmeltmaze:
+    - endlocation
+    - getstartlocation
+    - isendlocation
+    - isvalidlocation
+    - iterationadvance
+    - iterationbegin
+    - iterationcurrent
+    - iterationdone
+    - iterationmode
+    - nextletter
+  arrayqueue:
+    - arrayqueue
+    - doublecapacity
+  locationstack:
+    - locationstack
+    - locationstacknode
+  2dmaze: 
+    - endlocation
+    - getnumitems
+    - getstartlocation
+    - indextochange
+    - isendlocation
+    - isvalidlocation
+    - iterationadvance
+    - iterationbegin
+    - iterationcurrent
+    - iterationdone
+    - numitems
+    - validlocationcount
+    - validlocations

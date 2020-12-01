@@ -1,11 +1,8 @@
-from github import Github
+import argparse
 
-print("Enter the authentication token")
-ACCESS_TOKEN = input()
+import github
+import yaml
 
-file = open('myfile.txt', 'w')
-g = Github(ACCESS_TOKEN)
- 
 def search_github(keyword):
     rate_limit = g.get_rate_limit()
     rate = rate_limit.search
@@ -13,11 +10,12 @@ def search_github(keyword):
         print(f'You have 0/{rate.limit} API calls remaining. Reset time: {rate.reset}')
         return
     else:
-        print(f'You have {rate.remaining}/{rate.limit} API calls remaining')
+        print(f'You have {rate.remaining}/{rate.limit} API calls remaining. Reset time: {rate.reset}')
  
-    query = keyword+ "in:file"
+    # FIXME -- despite limiting on language, this still seems to find Java files
+    query = f'{keyword}+in:file+language:cpp'
     result = g.search_code(query, order='desc')
- 
+
     max_size = 100
     print(f'Found {result.totalCount} file(s)')
     if result.totalCount > max_size:
@@ -29,19 +27,33 @@ def search_github(keyword):
         output.append(file.html_url + "\n")
 
     return output
+
+def load_config(filename='config.yaml'):
+    with open(filename) as f:
+        return yaml.safe_load(f)
  
 if __name__ == '__main__':
+    config = load_config()
 
-    keywords = ["changeitematkey","isonheap","getsubmissiontime","invertexrange","currentsystemtime",
-    "rebalancepathtoroot","removeminitem","singlerotateleft","singlerotateright","submissiontime",
-    "isendlocation","iterationadvance","endlocation","getnumitems","iterationbegin","iterationdone",
-    "validlocationcount","verifybalance","iterationcurrent","doublecapacity","getstartlocation",
-    "isvalidlocation","iterationmode","requiredtime","validlocations","encryptiontree","nextletter",
-    "indextochange","avltree","printpreorder","locationstack","verifysearchorder","datatoheap","arrayqueue",
-    "locationstacknode","numitems","bstnode","arrayheap","avlnode","heapandfreestack"]
-    
-    for keyword in keywords:
-        file.write(keyword+"\n")
-        file.writelines(search_github(keyword))
-        file.write("\n")
+    token = config.get('GITHUB_ACCESS_TOKEN')
+    if not token:
+        print("Enter the authentication token")
+        token = input()
 
+    # TODO: allow searching only a subset of keywords (those for just one
+    # keyword), or specified keywords; use argparse to handle this
+    keywords = list(set(sum(config['keywords'].values(), [])))
+
+    print('keywords', keywords)
+
+    g = github.Github(token)
+
+    # TODO: don't overwrite previous results; write to a new file
+    with open('myfile.txt', 'w') as output:
+        for keyword in keywords:
+            output.write(keyword+"\n")
+            output.writelines(search_github(keyword))
+            output.write("\n")
+            # stop after one search for testing
+            break
+ 
